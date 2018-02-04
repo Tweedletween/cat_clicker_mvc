@@ -20,12 +20,24 @@ var controller = {
       model.cur_cat_idx = i;
     },
 
+    get_cur_cat_idx: () => {
+      return model.cur_cat_idx;
+    },
+
     get_cur_cat: function() {
       return model.cats[model.cur_cat_idx];
     },
 
     get_cats: function() {
         return model.cats;
+    },
+
+    save_cur_cat_info: function(name, path, clicks) {
+        if (model.cur_cat_idx !== null) {
+            model.cats[model.cur_cat_idx]['path'] = path;
+            model.cats[model.cur_cat_idx]['name'] = name;
+            model.cats[model.cur_cat_idx]['cnt'] = parseInt(clicks);
+        }
     },
 
     init: function() {
@@ -48,6 +60,51 @@ var view = {
                 this.render_cat_details();
             });
         }
+
+
+        this.edit_area = $('#edit_area');
+        this.edit_area.hide();
+
+        this.e_name = $('#e_name');
+        this.e_path = $('#e_path');
+        this.e_clicks = $('#e_clicks');
+
+        this.admin = $('#admin');
+        this.admin.click(() => {
+            this.edit_area.show();
+        });
+        this.admin.hide();
+
+        this.e_save = $('#e_save');
+        this.e_save.click(() => {
+            controller.save_cur_cat_info(this.e_name.val(),
+                this.e_path.val(),
+                this.e_clicks.val());
+
+            this.clear_edits();
+            this.edit_area.hide();
+            this.update_cat_list_item();
+            this.render_cat_details();
+        });
+
+        this.e_cancel = $('#e_cancel');
+        this.e_cancel.click(() => {
+            this.clear_edits();
+            this.edit_area.hide();
+        });
+    },
+
+    clear_edits: function() {
+        this.e_name.val('');
+        this.e_path.val('');
+        this.e_clicks.val('');
+    },
+
+    update_cat_list_item: function() {
+        var new_name = controller.get_cur_cat()['name'];
+        var cur_cat_idx = controller.get_cur_cat_idx();
+        var li_to_modify = this.cat_list.children('li').eq(cur_cat_idx);
+        li_to_modify.text(new_name);
     },
 
     render_cat_details: function() {
@@ -56,6 +113,7 @@ var view = {
         var cat = controller.get_cur_cat();
         htmlStr = `<h1>${cat['name']}</h1><img src=${cat['path']}><br><p>Clicks: ${cat['cnt']}</p>`
         this.show_case.html( htmlStr );
+        this.admin.show();
     }
 };
 

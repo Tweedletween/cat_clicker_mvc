@@ -10,8 +10,25 @@
     <div id='container'>
       <ul id='cat_list'>
       </ul>
+
       <div id='show_case'>
       </div>
+
+      <button id='admin'>Admin</button>
+
+      <div id='edit_area'>
+        <label for="e_name">Name:</label>
+        <input type="text" id="e_name"><br>
+
+        <label for="e_path">Path:</label>
+        <input type="text" id="e_path"><br>
+
+        <label for="e_clicks"># of Clicks:</label>
+        <input type="number" id="e_clicks" maxlength="10" pattern="\d*"><br>
+
+        <button id='e_save'>Save</button>
+        <button id='e_cancel'>Cancel</button>
+      </form>
     </div>
     <script src="js/libs/jquery.min.js"></script>
     <script src='js/script.js'></script>
